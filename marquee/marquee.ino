@@ -225,6 +225,7 @@ void setup() {
   matrix.setIntensity(0); // Use a value between 0 and 15 for brightness
 
   int maxPos = numberOfHorizontalDisplays * numberOfVerticalDisplays;
+
   for (int i = 0; i < maxPos; i++) {
     matrix.setRotation(i, ledRotation);
     matrix.setPosition(i, maxPos - i - 1, 0);
@@ -393,7 +394,7 @@ void loop() {
 
       //show high/low temperature
       if (SHOW_HIGHLOW) {
-        msg += "High/Low:" + weatherClient.getHigh(0) + "/" + weatherClient.getLow(0) + " " + getTempSymbol() + "  ";
+        msg += "Max/Min:" + weatherClient.getHigh(0) + "/" + weatherClient.getLow(0) + " " + getTempSymbol() + "  ";
       }
       
       if (SHOW_CONDITION) {
