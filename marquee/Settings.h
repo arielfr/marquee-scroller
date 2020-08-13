@@ -93,10 +93,10 @@ const int numberOfVerticalDisplays = 1; // default 1 for a single row height
 2: 180 degrees
 3: 90 degrees counter clockwise (default)
 */
-int ledRotation = 3;
+int ledRotation = 1;
 
-String timeDisplayTurnsOn = "06:30";  // 24 Hour Format HH:MM -- Leave blank for always on. (ie 05:30)
-String timeDisplayTurnsOff = "23:00"; // 24 Hour Format HH:MM -- Leave blank for always on. Both must be set to work.
+String timeDisplayTurnsOn = "07:30";  // 24 Hour Format HH:MM -- Leave blank for always on. (ie 05:30)
+String timeDisplayTurnsOff = "01:30"; // 24 Hour Format HH:MM -- Leave blank for always on. Both must be set to work.
 
 // OctoPrint Monitoring -- Monitor your 3D printer OctoPrint Server
 boolean OCTOPRINT_ENABLED = false;

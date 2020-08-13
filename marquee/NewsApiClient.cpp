@@ -158,15 +158,20 @@ String NewsApiClient::cleanText(String text) {
   text.replace("è", "e");
   text.replace("ë", "e");
   text.replace("ê", "e");
+  text.replace("é", "a");
   text.replace("à", "a");
   text.replace("â", "a");
   text.replace("ù", "u");
+  text.replace("ú", "u");
   text.replace("ç", "c");
+  text.replace("í", "i");
   text.replace("î", "i");
   text.replace("ï", "i");
   text.replace("ô", "o");
+  text.replace("ó", "o");
   text.replace("…", "...");
   text.replace("–", "-");
+  text.replace("é", "A");
   text.replace("Â", "A");
   text.replace("À", "A");
   text.replace("æ", "ae");
@@ -175,12 +180,14 @@ String NewsApiClient::cleanText(String text) {
   text.replace("È", "E");
   text.replace("Ë", "E");
   text.replace("Ô", "O");
+  text.replace("Ó", "o");
   text.replace("Ö", "Oe");
   text.replace("ö", "oe");
   text.replace("œ", "oe");
   text.replace("Œ", "OE");
   text.replace("Ù", "U");
   text.replace("Û", "U");
+  text.replace("ú", "u");
   text.replace("Ü", "Ue");
   text.replace("ü", "ue");
   text.replace("Ä", "Ae");
@@ -188,5 +195,6 @@ String NewsApiClient::cleanText(String text) {
   text.replace("ß", "ss");
   text.replace("»", "'");
   text.replace("«", "'");
+  text.replace("ñ", "n");
   return text;
 }

@@ -51,7 +51,7 @@ int8_t getWifiQuality();
 // LED Settings
 const int offset = 1;
 int refresh = 0;
-String message = "hello";
+String message = "Hola";
 int spacer = 1;  // dots between letters
 int width = 5 + spacer; // The font width is 5 pixels + spacer
 Max72xxPanel matrix = Max72xxPanel(pinCS, numberOfHorizontalDisplays, numberOfVerticalDisplays);
@@ -220,7 +220,7 @@ void setup() {
 
   readCityIds();
 
-  Serial.println("Number of LED Displays: " + String(numberOfHorizontalDisplays));
+  Serial.println("Numero de LEDS a mostrar: " + String(numberOfHorizontalDisplays));
   // initialize dispaly
   matrix.setIntensity(0); // Use a value between 0 and 15 for brightness
 
@@ -230,9 +230,9 @@ void setup() {
     matrix.setPosition(i, maxPos - i - 1, 0);
   }
 
-  Serial.println("matrix created");
+  Serial.println("Matriz creada");
   matrix.fillScreen(LOW); // show black
-  centerPrint("hello");
+  centerPrint("hola");
 
   tone(BUZZER_PIN, 415, 500);
   delay(500 * 1.3);
@@ -281,21 +281,21 @@ void setup() {
 
   if (ENABLE_OTA) {
     ArduinoOTA.onStart([]() {
-      Serial.println("Start");
+      Serial.println("Empezar");
     });
     ArduinoOTA.onEnd([]() {
-      Serial.println("\nEnd");
+      Serial.println("\nTerminar");
     });
     ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
       Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
     });
     ArduinoOTA.onError([](ota_error_t error) {
       Serial.printf("Error[%u]: ", error);
-      if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
-      else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
-      else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
-      else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
-      else if (error == OTA_END_ERROR) Serial.println("End Failed");
+      if (error == OTA_AUTH_ERROR) Serial.println("Fallo Autorizacion");
+      else if (error == OTA_BEGIN_ERROR) Serial.println("Fallo al empezar");
+      else if (error == OTA_CONNECT_ERROR) Serial.println("Fallo al conectar");
+      else if (error == OTA_RECEIVE_ERROR) Serial.println("Fallo al recibir");
+      else if (error == OTA_END_ERROR) Serial.println("Fallo al terminar");
     });
     ArduinoOTA.setHostname((const char *)hostname.c_str());
     if (OTA_Password != "") {
@@ -326,14 +326,14 @@ void setup() {
     serverUpdater.setup(&server, "/update", www_username, www_password);
     // Start the server
     server.begin();
-    Serial.println("Server started");
+    Serial.println("Servidor iniciado");
     // Print the IP address
     String webAddress = "http://" + WiFi.localIP().toString() + ":" + String(WEBSERVER_PORT) + "/";
     Serial.println("Use this URL : " + webAddress);
     scrollMessage(" v" + String(VERSION) + "  IP: " + WiFi.localIP().toString() + "  ");
   } else {
-    Serial.println("Web Interface is Disabled");
-    scrollMessage("Web Interface is Disabled");
+    Serial.println("La interfaz Web esta desactivada");
+    scrollMessage("La interfaz Web esta desactivada");
   }
 
   flashLED(1, 500);
@@ -400,14 +400,14 @@ void loop() {
         msg += description + "  ";
       }
       if (SHOW_HUMIDITY) {
-        msg += "Humidity:" + weatherClient.getHumidityRounded(0) + "%  ";
+        msg += "Humedad:" + weatherClient.getHumidityRounded(0) + "%  ";
       }
       if (SHOW_WIND) {
-        msg += "Wind: " + weatherClient.getDirectionText(0) + " @ " + weatherClient.getWindRounded(0) + " " + getSpeedSymbol() + "  ";
+        msg += "Viento: " + weatherClient.getDirectionText(0) + " @ " + weatherClient.getWindRounded(0) + " " + getSpeedSymbol() + "  ";
       }
       //line to show barometric pressure
       if (SHOW_PRESSURE) {
-        msg += "Pressure:" + weatherClient.getPressure(0) + getPressureSymbol() + "  ";
+        msg += "Presion:" + weatherClient.getPressure(0) + getPressureSymbol() + "  ";
       }
      
       msg += marqueeMessage + " ";
@@ -608,7 +608,7 @@ void handleSystemReset() {
   if (!athentication()) {
     return server.requestAuthentication();
   }
-  Serial.println("Reset System Configuration");
+  Serial.println("Reiniciando configuracion del sistema");
   if (SPIFFS.remove(CONFIG)) {
     redirectHome();
     ESP.restart();
@@ -948,19 +948,19 @@ void getWeatherData() //client function to send/receive GET request data.
     }
   }
 
-  Serial.println("Updating Time...");
+  Serial.println("Actualizando hora...");
   //Update the Time
   matrix.drawPixel(0, 4, HIGH);
   matrix.drawPixel(0, 3, HIGH);
   matrix.drawPixel(0, 2, HIGH);
-  Serial.println("matrix Width:" + matrix.width());
+  Serial.println("Tamaño de Matrix:" + matrix.width());
   matrix.write();
   TimeDB.updateConfig(TIMEDBKEY, weatherClient.getLat(0), weatherClient.getLon(0));
   time_t currentTime = TimeDB.getTime();
   if(currentTime > 5000 || firstEpoch == 0) {
     setTime(currentTime);
   } else {
-    Serial.println("Time update unsuccessful!");
+    Serial.println("Hora actualizada exitosamente");
   }
   lastEpoch = now();
   if (firstEpoch == 0) {
@@ -973,7 +973,7 @@ void getWeatherData() //client function to send/receive GET request data.
     matrix.drawPixel(0, 1, HIGH);
     matrix.drawPixel(0, 0, HIGH);
     matrix.write();
-    Serial.println("Getting News Data for " + NEWS_SOURCE);
+    Serial.println("Obteniendo noticias de " + NEWS_SOURCE);
     newsClient.updateNews();
   }
 
@@ -1190,13 +1190,13 @@ void displayWeatherData() {
 }
 
 void configModeCallback (WiFiManager *myWiFiManager) {
-  Serial.println("Entered config mode");
+  Serial.println("Modo de Configuracion");
   Serial.println(WiFi.softAPIP());
   Serial.println("Wifi Manager");
-  Serial.println("Please connect to AP");
+  Serial.println("Por favor conectar a AP");
   Serial.println(myWiFiManager->getConfigPortalSSID());
-  Serial.println("To setup Wifi Configuration");
-  scrollMessage("Please Connect to AP: " + String(myWiFiManager->getConfigPortalSSID()));
+  Serial.println("Para entrar a la configuracion del WIFI");
+  scrollMessage("Por favor conectar a AP: " + String(myWiFiManager->getConfigPortalSSID()));
   centerPrint("wifi");
 }
 
@@ -1292,10 +1292,10 @@ void enableDisplay(boolean enable) {
     }
     matrix.shutdown(false);
     matrix.fillScreen(LOW); // show black
-    Serial.println("Display was turned ON: " + now());
+    Serial.println("El display fue prendido: " + now());
   } else {
     matrix.shutdown(true);
-    Serial.println("Display was turned OFF: " + now());
+    Serial.println("El Display fue apagado: " + now());
     displayOffEpoch = lastEpoch;
   }
 }
@@ -1308,13 +1308,13 @@ void checkDisplay() {
   String currentTime = TimeDB.zeroPad(hour()) + ":" + TimeDB.zeroPad(minute());
 
   if (currentTime == timeDisplayTurnsOn && !displayOn) {
-    Serial.println("Time to turn display on: " + currentTime);
+    Serial.println("La hora para prender el Display es: " + currentTime);
     flashLED(1, 500);
     enableDisplay(true);
   }
 
   if (currentTime == timeDisplayTurnsOff && displayOn) {
-    Serial.println("Time to turn display off: " + currentTime);
+    Serial.println("La hora para apagar el display es: " + currentTime);
     flashLED(2, 500);
     enableDisplay(false);
   }
@@ -1324,9 +1324,9 @@ String writeCityIds() {
   // Save decoded message to SPIFFS file for playback on power up.
   File f = SPIFFS.open(CONFIG, "w");
   if (!f) {
-    Serial.println("File open failed!");
+    Serial.println("Fallo al abrir el archivo");
   } else {
-    Serial.println("Saving settings now...");
+    Serial.println("Guardando configuraciones...");
     f.println("TIMEDBKEY=" + TIMEDBKEY);
     f.println("APIKEY=" + APIKEY);
     f.println("CityID=" + String(CityIDs[0]));
@@ -1376,7 +1376,7 @@ String writeCityIds() {
 
 void readCityIds() {
   if (SPIFFS.exists(CONFIG) == false) {
-    Serial.println("Settings File does not yet exists.");
+    Serial.println("El archivo de configuraciones todavia no existe");
     writeCityIds();
     return;
   }
