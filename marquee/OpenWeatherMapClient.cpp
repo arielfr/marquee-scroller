@@ -238,7 +238,7 @@ String OpenWeatherMapClient::getDirectionRounded(int index)
 String OpenWeatherMapClient::getDirectionText(int index) {
   int num = getDirectionRounded(index).toInt();
   int val = floor((num / 22.5) + 0.5);
-  String arr[] = {"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"};
+  String arr[] = {"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSO", "SO", "OSO", "O", "ONO", "NO", "NNO"};
   return arr[(val % 16)];
 }
 
