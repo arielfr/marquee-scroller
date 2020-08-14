@@ -158,7 +158,7 @@ String NewsApiClient::cleanText(String text) {
   text.replace("è", "e");
   text.replace("ë", "e");
   text.replace("ê", "e");
-  text.replace("é", "a");
+  text.replace("á", "a");
   text.replace("à", "a");
   text.replace("â", "a");
   text.replace("ù", "u");
