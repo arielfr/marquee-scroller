@@ -72,7 +72,9 @@ NewsApiClient newsClient(NEWS_API_KEY, NEWS_SOURCE);
 int newsIndex = 0;
 
 // Weather Client
-OpenWeatherMapClient weatherClient(APIKEY, CityIDs, 1, IS_METRIC);
+String weatherLanguage = "sp";
+OpenWeatherMapClient weatherClient(APIKEY, CityIDs, 1, IS_METRIC, weatherLanguage);
+
 // (some) Default Weather Settings
 boolean SHOW_DATE = false;
 boolean SHOW_CITY = true;

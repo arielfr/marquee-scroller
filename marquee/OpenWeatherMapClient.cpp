@@ -24,10 +24,11 @@ SOFTWARE.
 #include "OpenWeatherMapClient.h"
 #include "math.h"
 
-OpenWeatherMapClient::OpenWeatherMapClient(String ApiKey, int CityIDs[], int cityCount, boolean isMetric) {
+OpenWeatherMapClient::OpenWeatherMapClient(String ApiKey, int CityIDs[], int cityCount, boolean isMetric, String lang) {
   updateCityIdList(CityIDs, cityCount);
   myApiKey = ApiKey;
   setMetric(isMetric);
+  setLang(lang);
 }
 
 void OpenWeatherMapClient::updateWeatherApiKey(String ApiKey) {
@@ -36,7 +37,7 @@ void OpenWeatherMapClient::updateWeatherApiKey(String ApiKey) {
 
 void OpenWeatherMapClient::updateWeather() {
   WiFiClient weatherClient;
-  String apiGetData = "GET /data/2.5/group?id=" + myCityIDs + "&units=" + units + "&cnt=1&APPID=" + myApiKey + " HTTP/1.1";
+  String apiGetData = "GET /data/2.5/group?id=" + myCityIDs + "&units=" + units + "&cnt=1&lang=" + language + "&APPID=" + myApiKey + " HTTP/1.1";
 
   Serial.println("Getting Weather Data");
   Serial.println(apiGetData);
@@ -176,6 +177,10 @@ void OpenWeatherMapClient::setMetric(boolean isMetric) {
   }
 }
 
+void OpenWeatherMapClient::setLang(String lang) {
+  language= lang;
+}
+
 String OpenWeatherMapClient::getLat(int index) {
   return weathers[index].lat;
 }
@@ -288,25 +293,25 @@ String OpenWeatherMapClient::getWeekDay(int index, float offset) {
     day = (((epoc + (3600 * (int)offset)) / 86400) + 4) % 7;
     switch (day) {
       case 0:
-        rtnValue = "Sunday";
+        rtnValue = "Domingo";
         break;
       case 1:
-        rtnValue = "Monday";
+        rtnValue = "Lunes";
         break;
       case 2:
-        rtnValue = "Tuesday";
+        rtnValue = "Martes";
         break;
       case 3:
-        rtnValue = "Wednesday";
+        rtnValue = "Miercoles";
         break;
       case 4:
-        rtnValue = "Thursday";
+        rtnValue = "Jueves";
         break;
       case 5:
-        rtnValue = "Friday";
+        rtnValue = "Viernes";
         break;
       case 6:
-        rtnValue = "Saturday";
+        rtnValue = "Sabado";
         break;
       default:
         break;
