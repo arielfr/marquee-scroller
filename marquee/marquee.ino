@@ -379,38 +379,42 @@ void loop() {
     // Check to see if we need to Scroll some Data
     if (displayRefreshCount <= 0) {
       displayRefreshCount = minutesBetweenScrolling;
+      
       String temperature = weatherClient.getTempRounded(0);
       String description = weatherClient.getDescription(0);
-      description.toUpperCase();
+      
       String msg;
+      
       msg += " ";
 
       if (SHOW_DATE) {
         msg += TimeDB.getDayName() + ", ";
         msg += TimeDB.getMonthName() + " " + day() + "  ";
       }
+      
       if (SHOW_CITY) {
         msg += weatherClient.getCity(0) + "  ";
       }
-      msg += temperature + getTempSymbol() + "  ";
+      
+      msg += temperature + getTempSymbol() + "    ";
 
       //show high/low temperature
       if (SHOW_HIGHLOW) {
-        msg += "Max/Min:" + weatherClient.getHigh(0) + "/" + weatherClient.getLow(0) + " " + getTempSymbol() + "  ";
+        msg += "Max/Min:" + weatherClient.getHigh(0) + " / " + weatherClient.getLow(0) + "" + getTempSymbol() + "    ";
       }
       
       if (SHOW_CONDITION) {
         msg += description + "  ";
       }
       if (SHOW_HUMIDITY) {
-        msg += "Humedad:" + weatherClient.getHumidityRounded(0) + "%  ";
+        msg += "Humedad:" + weatherClient.getHumidityRounded(0) + "%    ";
       }
       if (SHOW_WIND) {
-        msg += "Viento: " + weatherClient.getDirectionText(0) + " @ " + weatherClient.getWindRounded(0) + " " + getSpeedSymbol() + "  ";
+        msg += "Viento: " + weatherClient.getDirectionText(0) + " @ " + weatherClient.getWindRounded(0) + "    " + getSpeedSymbol() + "    ";
       }
       //line to show barometric pressure
       if (SHOW_PRESSURE) {
-        msg += "Presion:" + weatherClient.getPressure(0) + getPressureSymbol() + "  ";
+        msg += "Presion:" + weatherClient.getPressure(0) + getPressureSymbol() + "    ";
       }
      
       msg += marqueeMessage + " ";
