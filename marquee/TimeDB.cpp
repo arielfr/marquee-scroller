@@ -75,6 +75,9 @@ time_t TimeDB::getTime()
   client.stop(); //stop client
   Serial.println(result);
 
+  int timeStart = result.lastIndexOf('{'); // trim response to start of JSON issue 194
+  result = result.substring(timeStart);
+  
   char jsonArray [result.length() + 1];
   result.toCharArray(jsonArray, sizeof(jsonArray));
   jsonArray[result.length() + 1] = '\0';
