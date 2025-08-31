@@ -73,7 +73,7 @@ int newsIndex = 0;
 
 // Weather Client
 String weatherLanguage = "sp";
-OpenWeatherMapClient weatherClient(APIKEY, CityIDs, 1, IS_METRIC, weatherLanguage);
+OpenWeatherMapClient weatherClient(APIKEY, LATITUDE, LONGITUDE, 1, IS_METRIC, weatherLanguage);
 
 // (some) Default Weather Settings
 boolean SHOW_DATE = false;
@@ -118,8 +118,9 @@ static const char CHANGE_FORM1[] PROGMEM = "<form class='w3-container' action='/
                       "<input class='w3-input w3-border w3-margin-bottom' type='text' name='TimeZoneDB' value='%TIMEDBKEY%' maxlength='60'>"
                       "<label>OpenWeatherMap API Key (get from <a href='https://openweathermap.org/' target='_BLANK'>here</a>)</label>"
                       "<input class='w3-input w3-border w3-margin-bottom' type='text' name='openWeatherMapApiKey' value='%WEATHERKEY%' maxlength='70'>"
-                      "<p><label>%CITYNAME1% (<a href='http://openweathermap.org/find' target='_BLANK'><i class='fas fa-search'></i> Search for City ID</a>)</label>"
-                      "<input class='w3-input w3-border w3-margin-bottom' type='text' name='city1' value='%CITY1%' onkeypress='return isNumberKey(event)'></p>"
+                      "<p><label>%CITYNAME1% (<a href='http://openweathermap.org/find' target='_BLANK'><i class='fas fa-search'></i> Search for Latitude & Longitude</a>)</label>"
+                      "<input class='w3-input w3-border w3-margin-bottom' type='text' name='latitude' value='%LATITUDE%'></p>"
+                      "<input class='w3-input w3-border w3-margin-bottom' type='text' name='longitude' value='%LONGITUDE%'></p>"
                       "<p><input name='metric' class='w3-check w3-margin-top' type='checkbox' %CHECKED%> Use Metric (Celsius)</p>"
                       "<p><input name='showdate' class='w3-check w3-margin-top' type='checkbox' %DATE_CHECKED%> Display Date</p>"
                       "<p><input name='showcity' class='w3-check w3-margin-top' type='checkbox' %CITY_CHECKED%> Display City Name</p>"
@@ -580,7 +581,8 @@ void handleLocations() {
   }
   TIMEDBKEY = server.arg("TimeZoneDB");
   APIKEY = server.arg("openWeatherMapApiKey");
-  CityIDs[0] = server.arg("city1").toInt();
+  LATITUDE = server.arg("latitude");
+  LONGITUDE = server.arg("longitude");
   flashOnSeconds = server.hasArg("flashseconds");
   IS_24HOUR = server.hasArg("is24hour");
   IS_PM = server.hasArg("isPM");
@@ -822,7 +824,11 @@ void handleConfigure() {
     cityName = weatherClient.getCity(0) + ", " + weatherClient.getCountry(0);
   }
   form.replace("%CITYNAME1%", cityName);
-  form.replace("%CITY1%", String(CityIDs[0]));
+
+  // Set latitude and longitude
+  form.replace("%LATITUDE%", LATITUDE);
+  form.replace("%LONGITUDE%", LONGITUDE);
+
   String isDateChecked = "";
   if (SHOW_DATE) {
     isDateChecked = "checked='checked'";
@@ -1327,7 +1333,7 @@ void checkDisplay() {
   }
 }
 
-String writeCityIds() {
+void writeCityIds() {
   // Save decoded message to SPIFFS file for playback on power up.
   File f = SPIFFS.open(CONFIG, "w");
   if (!f) {
@@ -1336,7 +1342,8 @@ String writeCityIds() {
     Serial.println("Guardando configuraciones...");
     f.println("TIMEDBKEY=" + TIMEDBKEY);
     f.println("APIKEY=" + APIKEY);
-    f.println("CityID=" + String(CityIDs[0]));
+    f.println("latitude=" + String(LATITUDE));
+    f.println("longitude=" + String(LONGITUDE));
     f.println("marqueeMessage=" + marqueeMessage);
     f.println("newsSource=" + NEWS_SOURCE);
     f.println("timeDisplayTurnsOn=" + timeDisplayTurnsOn);
@@ -1376,9 +1383,8 @@ String writeCityIds() {
   }
   f.close();
   readCityIds();
-  weatherClient.updateCityIdList(CityIDs, 1);
-  String cityIds = weatherClient.getMyCityIDs();
-  return cityIds;
+  weatherClient.updateLocation(LATITUDE, LONGITUDE);
+  return;
 }
 
 void readCityIds() {
@@ -1401,9 +1407,15 @@ void readCityIds() {
       APIKEY.trim();
       Serial.println("APIKEY: " + APIKEY);
     }
-    if (line.indexOf("CityID=") >= 0) {
-      CityIDs[0] = line.substring(line.lastIndexOf("CityID=") + 7).toInt();
-      Serial.println("CityID: " + String(CityIDs[0]));
+    if (line.indexOf("latitude=") >= 0) {
+      LATITUDE = line.substring(line.lastIndexOf("latitude=") + 9);
+      LATITUDE.trim();
+      Serial.println("LATITUDE: " + LATITUDE);
+    }
+    if (line.indexOf("longitude=") >= 0) {
+      LONGITUDE = line.substring(line.lastIndexOf("longitude=") + 10);
+      LONGITUDE.trim();
+      Serial.println("LONGITUDE: " + LONGITUDE);
     }
     if (line.indexOf("newsSource=") >= 0) {
       NEWS_SOURCE = line.substring(line.lastIndexOf("newsSource=") + 11);
@@ -1577,7 +1589,7 @@ void readCityIds() {
   newsClient.updateNewsClient(NEWS_API_KEY, NEWS_SOURCE);
   weatherClient.updateWeatherApiKey(APIKEY);
   weatherClient.setMetric(IS_METRIC);
-  weatherClient.updateCityIdList(CityIDs, 1);
+  weatherClient.updateLocation(LATITUDE, LONGITUDE);
   printerClient.updateOctoPrintClient(OctoPrintApiKey, OctoPrintServer, OctoPrintPort, OctoAuthUser, OctoAuthPass);
 }
 

@@ -28,7 +28,8 @@ SOFTWARE.
 class OpenWeatherMapClient {
 
 private:
-  String myCityIDs = "";
+  String myLatitude = "";
+  String myLongitude = "";
   String myApiKey = "";
   String units = "";
   String language= "";
@@ -62,12 +63,12 @@ private:
   String roundValue(String value);
   
 public:
-  OpenWeatherMapClient(String ApiKey, int CityIDs[], int cityCount, boolean isMetric);
-  OpenWeatherMapClient(String ApiKey, int CityIDs[], int cityCount, boolean isMetrci, String lang);
+  OpenWeatherMapClient(String ApiKey, String latitude, String longitude, int cityCount, boolean isMetric);
+  OpenWeatherMapClient(String ApiKey, String latitude, String longitude, int cityCount, boolean isMetrci, String lang);
   
   void updateWeather();
   void updateWeatherApiKey(String ApiKey);
-  void updateCityIdList(int CityIDs[], int cityCount);
+  void updateLocation(String latitude, String longitude);
   void setMetric(boolean isMetric);
   void setLang(String lang);
 
@@ -93,7 +94,6 @@ public:
   String getDescription(int index);
   String getIcon(int index);
   boolean getCached();
-  String getMyCityIDs();
   String getWeatherIcon(int index);
   String getError();
   String getWeekDay(int index, float offset);

@@ -61,6 +61,8 @@ String TIMEDBKEY = ""; // Your API Key from https://timezonedb.com/register
 String APIKEY = ""; // Your API Key from http://openweathermap.org/
 // Default City Location (use http://openweathermap.org/find to find city ID)
 int CityIDs[] = { 3435910 }; //Only USE ONE for weather marquee
+String LATITUDE = "-34.8335";
+String LONGITUDE = "-56.1674";
 String marqueeMessage = "";
 boolean IS_METRIC = true; // false = Imperial and true = Metric
 boolean IS_24HOUR = true; // 23:00 millitary 24 hour clock
@@ -93,7 +95,7 @@ const int numberOfVerticalDisplays = 1; // default 1 for a single row height
 2: 180 degrees
 3: 90 degrees counter clockwise (default)
 */
-int ledRotation = 1;
+int ledRotation = 3;
 
 String timeDisplayTurnsOn = "07:30";  // 24 Hour Format HH:MM -- Leave blank for always on. (ie 05:30)
 String timeDisplayTurnsOff = "01:30"; // 24 Hour Format HH:MM -- Leave blank for always on. Both must be set to work.
